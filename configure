@@ -776,6 +776,7 @@ enable_dependency_tracking
 with_gnu_ld
 with_sysroot
 enable_libtool_lock
+enable_largefile
 enable_lib
 enable_util
 enable_example
@@ -1423,6 +1424,7 @@ Optional Features:
   --disable-dependency-tracking
                           speeds up one-time build
   --disable-libtool-lock  avoid locking (might break parallel builds)
+  --disable-largefile     omit support for large files
   --enable-lib            Compile with library
   --enable-util           Compile with util
   --enable-example        Compile with examples
@@ -13488,7 +13490,7 @@ _ACEOF
 
   fi
 
-libfuse_libs=$libfuse_libs $LTLIBICONV
+libfuse_libs="$libfuse_libs $LTLIBICONV"
  if test "$am_cv_func_iconv" = yes; then
   ICONV_TRUE=
   ICONV_FALSE='#'
