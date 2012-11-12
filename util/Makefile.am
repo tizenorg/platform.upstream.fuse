@@ -41,10 +41,6 @@ install-exec-local:
 	$(INSTALL_PROGRAM) $(builddir)/mount.fuse $(DESTDIR)$(MOUNT_FUSE_PATH)/mount.fuse
 	$(MKDIR_P) $(DESTDIR)$(INIT_D_PATH)
 	$(INSTALL_SCRIPT) $(srcdir)/init_script $(DESTDIR)$(INIT_D_PATH)/fuse
-	@if test -x /usr/sbin/update-rc.d; then \
-		echo "/usr/sbin/update-rc.d fuse start 34 S . start 41 0 6 . || true"; \
-		/usr/sbin/update-rc.d fuse start 34 S . start 41 0 6 . || true; \
-	fi
 
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(UDEV_RULES_PATH)
