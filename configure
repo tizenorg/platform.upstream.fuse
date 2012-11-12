@@ -13488,7 +13488,7 @@ _ACEOF
 
   fi
 
-libfuse_libs="$libfuse_libs $LTLIBICONV"
+libfuse_libs=$libfuse_libs $LTLIBICONV
  if test "$am_cv_func_iconv" = yes; then
   ICONV_TRUE=
   ICONV_FALSE='#'
