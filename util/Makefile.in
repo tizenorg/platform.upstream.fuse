@@ -59,6 +59,9 @@ fusermount_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
+fusermount_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(fusermount_CFLAGS) \
+	$(CFLAGS) $(fusermount_LDFLAGS) $(LDFLAGS) -o $@
 am_mount_fuse_OBJECTS = mount.fuse.$(OBJEXT)
 mount_fuse_OBJECTS = $(am_mount_fuse_OBJECTS)
 mount_fuse_LDADD = $(LDADD)
@@ -237,6 +240,8 @@ AM_CPPFLAGS = -D_FILE_OFFSET_BITS=64
 # copying it over.
 fusermount_SOURCES = fusermount.c mount_util.c
 fusermount_CPPFLAGS = -I$(top_srcdir)/lib
+fusermount_CFLAGS = -fPIE $(AM_CFLAGS)
+fusermount_LDFLAGS = -pie $(AM_LDFLAGS)
 BUILT_SOURCES = mount_util.c
 mount_fuse_SOURCES = mount.fuse.c
 ulockmgr_server_SOURCES = ulockmgr_server.c
@@ -332,7 +337,7 @@ clean-noinstPROGRAMS:
 	rm -f $$list
 fusermount$(EXEEXT): $(fusermount_OBJECTS) $(fusermount_DEPENDENCIES) 
 	@rm -f fusermount$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(fusermount_OBJECTS) $(fusermount_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(fusermount_LINK) $(fusermount_OBJECTS) $(fusermount_LDADD) $(LIBS)
 mount.fuse$(EXEEXT): $(mount_fuse_OBJECTS) $(mount_fuse_DEPENDENCIES) 
 	@rm -f mount.fuse$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(mount_fuse_OBJECTS) $(mount_fuse_LDADD) $(LIBS)
@@ -376,36 +381,36 @@ distclean-compile:
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
 fusermount-fusermount.o: fusermount.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT fusermount-fusermount.o -MD -MP -MF $(DEPDIR)/fusermount-fusermount.Tpo -c -o fusermount-fusermount.o `test -f 'fusermount.c' || echo '$(srcdir)/'`fusermount.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(fusermount_CFLAGS) $(CFLAGS) -MT fusermount-fusermount.o -MD -MP -MF $(DEPDIR)/fusermount-fusermount.Tpo -c -o fusermount-fusermount.o `test -f 'fusermount.c' || echo '$(srcdir)/'`fusermount.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fusermount-fusermount.Tpo $(DEPDIR)/fusermount-fusermount.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fusermount.c' object='fusermount-fusermount.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o fusermount-fusermount.o `test -f 'fusermount.c' || echo '$(srcdir)/'`fusermount.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(fusermount_CFLAGS) $(CFLAGS) -c -o fusermount-fusermount.o `test -f 'fusermount.c' || echo '$(srcdir)/'`fusermount.c
 
 fusermount-fusermount.obj: fusermount.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT fusermount-fusermount.obj -MD -MP -MF $(DEPDIR)/fusermount-fusermount.Tpo -c -o fusermount-fusermount.obj `if test -f 'fusermount.c'; then $(CYGPATH_W) 'fusermount.c'; else $(CYGPATH_W) '$(srcdir)/fusermount.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(fusermount_CFLAGS) $(CFLAGS) -MT fusermount-fusermount.obj -MD -MP -MF $(DEPDIR)/fusermount-fusermount.Tpo -c -o fusermount-fusermount.obj `if test -f 'fusermount.c'; then $(CYGPATH_W) 'fusermount.c'; else $(CYGPATH_W) '$(srcdir)/fusermount.c'; fi`
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fusermount-fusermount.Tpo $(DEPDIR)/fusermount-fusermount.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fusermount.c' object='fusermount-fusermount.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o fusermount-fusermount.obj `if test -f 'fusermount.c'; then $(CYGPATH_W) 'fusermount.c'; else $(CYGPATH_W) '$(srcdir)/fusermount.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(fusermount_CFLAGS) $(CFLAGS) -c -o fusermount-fusermount.obj `if test -f 'fusermount.c'; then $(CYGPATH_W) 'fusermount.c'; else $(CYGPATH_W) '$(srcdir)/fusermount.c'; fi`
 
 fusermount-mount_util.o: mount_util.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT fusermount-mount_util.o -MD -MP -MF $(DEPDIR)/fusermount-mount_util.Tpo -c -o fusermount-mount_util.o `test -f 'mount_util.c' || echo '$(srcdir)/'`mount_util.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(fusermount_CFLAGS) $(CFLAGS) -MT fusermount-mount_util.o -MD -MP -MF $(DEPDIR)/fusermount-mount_util.Tpo -c -o fusermount-mount_util.o `test -f 'mount_util.c' || echo '$(srcdir)/'`mount_util.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fusermount-mount_util.Tpo $(DEPDIR)/fusermount-mount_util.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='mount_util.c' object='fusermount-mount_util.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o fusermount-mount_util.o `test -f 'mount_util.c' || echo '$(srcdir)/'`mount_util.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(fusermount_CFLAGS) $(CFLAGS) -c -o fusermount-mount_util.o `test -f 'mount_util.c' || echo '$(srcdir)/'`mount_util.c
 
 fusermount-mount_util.obj: mount_util.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT fusermount-mount_util.obj -MD -MP -MF $(DEPDIR)/fusermount-mount_util.Tpo -c -o fusermount-mount_util.obj `if test -f 'mount_util.c'; then $(CYGPATH_W) 'mount_util.c'; else $(CYGPATH_W) '$(srcdir)/mount_util.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(fusermount_CFLAGS) $(CFLAGS) -MT fusermount-mount_util.obj -MD -MP -MF $(DEPDIR)/fusermount-mount_util.Tpo -c -o fusermount-mount_util.obj `if test -f 'mount_util.c'; then $(CYGPATH_W) 'mount_util.c'; else $(CYGPATH_W) '$(srcdir)/mount_util.c'; fi`
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/fusermount-mount_util.Tpo $(DEPDIR)/fusermount-mount_util.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='mount_util.c' object='fusermount-mount_util.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o fusermount-mount_util.obj `if test -f 'mount_util.c'; then $(CYGPATH_W) 'mount_util.c'; else $(CYGPATH_W) '$(srcdir)/mount_util.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fusermount_CPPFLAGS) $(CPPFLAGS) $(fusermount_CFLAGS) $(CFLAGS) -c -o fusermount-mount_util.obj `if test -f 'mount_util.c'; then $(CYGPATH_W) 'mount_util.c'; else $(CYGPATH_W) '$(srcdir)/mount_util.c'; fi`
 
 ulockmgr_server-ulockmgr_server.o: ulockmgr_server.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(ulockmgr_server_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ulockmgr_server-ulockmgr_server.o -MD -MP -MF $(DEPDIR)/ulockmgr_server-ulockmgr_server.Tpo -c -o ulockmgr_server-ulockmgr_server.o `test -f 'ulockmgr_server.c' || echo '$(srcdir)/'`ulockmgr_server.c

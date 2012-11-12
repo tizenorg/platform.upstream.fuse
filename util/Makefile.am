@@ -10,6 +10,8 @@ noinst_PROGRAMS = mount.fuse
 # copying it over.
 fusermount_SOURCES = fusermount.c mount_util.c
 fusermount_CPPFLAGS = -I$(top_srcdir)/lib
+fusermount_CFLAGS =  -fPIE $(AM_CFLAGS)
+fusermount_LDFLAGS = -pie $(AM_LDFLAGS)
 BUILT_SOURCES = mount_util.c
 mount_util.c: $(top_srcdir)/lib/mount_util.c
 	@cp $(top_srcdir)/lib/mount_util.c .
