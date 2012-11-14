@@ -97,17 +97,12 @@ export MOUNT_FUSE_PATH=%{_sbindir}
 %configure --with-pic \
     --with-pkgconfigdir=%{_libdir}/pkgconfig \
     --enable-lib \
-    --enable-util \
-    --enable-example
+    --enable-util 
 make %{?_smp_mflags}
 
 %install
 %make_install
 rm -rf $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
-
-(cd example && %{__make} clean)
-%{__rm} -rf example/.deps example/Makefile.am example/Makefile.in
-%{__rm} -rf doc/Makefile.am doc/Makefile.in doc/Makefile
 
 %post -n libfuse -p /sbin/ldconfig
 
@@ -137,7 +132,7 @@ rm -rf $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
 
 %files devel
 %defattr(-,root,root)
-%doc example doc
+%doc  doc
 %{_libdir}/libfuse.so
 %{_libdir}/libulockmgr.so
 %{_includedir}/fuse.h
