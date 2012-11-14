@@ -104,23 +104,10 @@ make %{?_smp_mflags}
 %install
 %make_install
 rm -rf $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
-mkdir $RPM_BUILD_ROOT/sbin
-mkdir $RPM_BUILD_ROOT/%{_lib}
-%{__ln_s} -v %{_sbindir}/mount.fuse $RPM_BUILD_ROOT/sbin
-pushd $RPM_BUILD_ROOT/%{_libdir}
-for libname in $(ls *.so.*);do
-%{__ln_s} -v /%{_libdir}/$libname %{buildroot}/%{_lib}
-done
-popd
 
 (cd example && %{__make} clean)
 %{__rm} -rf example/.deps example/Makefile.am example/Makefile.in
 %{__rm} -rf doc/Makefile.am doc/Makefile.in doc/Makefile
-
-%post
-%set_permissions %{_bindir}/fusermount
-%verifyscript
-%verify_permissions -e %{_bindir}/fusermount
 
 %post -n libfuse -p /sbin/ldconfig
 
@@ -130,25 +117,22 @@ popd
 
 %postun -n libulockmgr -p /sbin/ldconfig
 
+
+%docs_package
+
 %files
 %defattr(-,root,root)
-%doc AUTHORS ChangeLog FAQ NEWS README* COPYING*
+%doc COPYING*
 %verify(not mode) %attr(4750,root,trusted) %{_bindir}/fusermount
-%exclude /sbin/mount.fuse
 %{_sbindir}/mount.fuse
 %{_bindir}/ulockmgr_server
-%{_mandir}/man1/fusermount.1.*
-%{_mandir}/man1/ulockmgr_server.1.*
-%{_mandir}/man8/mount.fuse.8.*
 
 %files -n libfuse
 %defattr(-,root,root)
-%exclude /%{_lib}/libfuse.so.2*
 %{_libdir}/libfuse.so.2*
 
 %files -n libulockmgr
 %defattr(-,root,root)
-%exclude /%{_lib}/libulockmgr.so.*
 %{_libdir}/libulockmgr.so.*
 
 %files devel
