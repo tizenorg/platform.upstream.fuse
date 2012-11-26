@@ -117,7 +117,7 @@ rm -rf $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
 
 %files
 %defattr(-,root,root)
-%doc COPYING*
+%license COPYING*
 %verify(not mode) %attr(4750,root,trusted) %{_bindir}/fusermount
 %{_sbindir}/mount.fuse
 %{_bindir}/ulockmgr_server
