@@ -98,8 +98,6 @@ export MOUNT_FUSE_PATH=%{_sbindir}
 %configure --with-pic \
     --with-pkgconfigdir=%{_libdir}/pkgconfig \
     --enable-lib \
-    --disable-kernel-module \
-    --disable-util \
     --disable-example \
     --enable-static
 make %{?_smp_mflags}
@@ -136,7 +134,6 @@ rm -rf $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
 
 %files devel
 %defattr(-,root,root)
-%doc  doc
 %{_libdir}/libfuse.so
 %{_libdir}/libulockmgr.so
 %{_includedir}/fuse.h
