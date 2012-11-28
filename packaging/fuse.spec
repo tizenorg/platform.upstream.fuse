@@ -123,6 +123,7 @@ rm -rf $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
 %verify(not mode) %attr(4750,root,trusted) %{_bindir}/fusermount
 %{_sbindir}/mount.fuse
 %{_bindir}/ulockmgr_server
+/etc/udev/rules.d/99-fuse.rules
 
 %files -n libfuse
 %defattr(-,root,root)
