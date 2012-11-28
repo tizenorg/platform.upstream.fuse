@@ -10,6 +10,7 @@ Source98:       baselibs.conf
 Url:            http://fuse.sourceforge.net
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       util-linux >= 2.18
+RequiresL       which
 BuildRequires:  pkgconfig
 Supplements:    filesystem(fuse)
 
@@ -97,7 +98,10 @@ export MOUNT_FUSE_PATH=%{_sbindir}
 %configure --with-pic \
     --with-pkgconfigdir=%{_libdir}/pkgconfig \
     --enable-lib \
-    --enable-util 
+    --disable-kernel-module \
+    --disable-util \
+    --disable-example \
+    --enable-static
 make %{?_smp_mflags}
 
 %install
