@@ -10,7 +10,7 @@ Source98:       baselibs.conf
 Url:            http://fuse.sourceforge.net
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       util-linux >= 2.18
-RequiresL       which
+Requires:       which
 BuildRequires:  pkgconfig
 Supplements:    filesystem(fuse)
 
