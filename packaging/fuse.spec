@@ -120,7 +120,7 @@ rm -rf $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
 %files
 %defattr(-,root,root)
 %license COPYING*
-%verify(not mode) %attr(4750,root,trusted) %{_bindir}/fusermount
+%verify(not mode) %attr(4755,root,root) %{_bindir}/fusermount
 %{_sbindir}/mount.fuse
 %{_bindir}/ulockmgr_server
 /etc/udev/rules.d/99-fuse.rules

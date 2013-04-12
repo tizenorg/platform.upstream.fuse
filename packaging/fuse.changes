@@ -1,0 +1,3 @@
+* Fri Apr 12 2013 Patrick McCarty <patrick.mccarty@linux.intel.com> accepted/trunk/20130325.212310@c17e81b
+- (TZPC-966) Use upstream permissions for /usr/bin/fusermount
+
