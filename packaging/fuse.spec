@@ -7,6 +7,7 @@ Release:        0
 Source:         %{name}-%{version}.tar.gz
 Source2:        fuse.rpmlintrc
 Source98:       baselibs.conf
+Source1001: 	fuse.manifest
 Url:            http://fuse.sourceforge.net
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       util-linux >= 2.18
@@ -91,6 +92,7 @@ http://fuse.sourceforge.net/wiki
 
 %prep
 %setup -q
+cp %{SOURCE1001} .
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS -g -fno-strict-aliasing"
@@ -118,6 +120,7 @@ rm -rf $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
 %docs_package
 
 %files
+%manifest %{name}.manifest
 %defattr(-,root,root)
 %license COPYING*
 %verify(not mode) %attr(4755,root,root) %{_bindir}/fusermount
@@ -126,14 +129,17 @@ rm -rf $RPM_BUILD_ROOT/%{_sysconfdir}/init.d
 /etc/udev/rules.d/99-fuse.rules
 
 %files -n libfuse
+%manifest %{name}.manifest
 %defattr(-,root,root)
 %{_libdir}/libfuse.so.2*
 
 %files -n libulockmgr
+%manifest %{name}.manifest
 %defattr(-,root,root)
 %{_libdir}/libulockmgr.so.*
 
 %files devel
+%manifest %{name}.manifest
 %defattr(-,root,root)
 %{_libdir}/libfuse.so
 %{_libdir}/libulockmgr.so
