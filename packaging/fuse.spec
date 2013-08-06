@@ -1,7 +1,7 @@
 Name:           fuse
 Summary:        User space File System
-License:        GPL-2.0+ ; LGPL-2.1+
-Group:          System/Filesystems
+License:        GPL-2.0+ and LGPL-2.1+
+Group:          System/Library
 Version:        2.9.2
 Release:        0
 Source:         %{name}-%{version}.tar.gz
@@ -51,7 +51,6 @@ http://fuse.sourceforge.net/wiki
 
 %package -n libulockmgr
 Summary:        Library of FUSE, the User space File System for GNU/Linux and BSD
-Group:          System/Filesystems
 
 %description -n libulockmgr
 With FUSE, a user space program can export a file system through the
@@ -59,7 +58,6 @@ kernel-default (Linux kernel).
 
 %package -n libfuse
 Summary:        Library of FUSE, the User space File System for GNU/Linux and BSD
-Group:          System/Filesystems
 
 %description -n libfuse
 With FUSE, a user space program can export a file system through the
@@ -75,7 +73,6 @@ http://fuse.sourceforge.net/wiki
 
 %package devel
 Summary:        Development package for FUSE (userspace filesystem) modules
-Group:          Development/Languages/C and C++
 Requires:       fuse = %{version}
 Requires:       glibc-devel
 Requires:       libfuse = %{version}
