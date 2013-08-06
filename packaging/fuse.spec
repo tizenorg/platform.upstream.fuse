@@ -1,7 +1,7 @@
 Name:           fuse
 Summary:        User space File System
 License:        GPL-2.0+ and LGPL-2.1+
-Group:          System/Library
+Group:          System/Libraries
 Version:        2.9.2
 Release:        0
 Source:         %{name}-%{version}.tar.gz
@@ -9,7 +9,6 @@ Source2:        fuse.rpmlintrc
 Source98:       baselibs.conf
 Source1001: 	fuse.manifest
 Url:            http://fuse.sourceforge.net
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       util-linux >= 2.18
 Requires:       which
 BuildRequires:  pkgconfig
