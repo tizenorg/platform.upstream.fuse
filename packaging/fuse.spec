@@ -1,6 +1,6 @@
 Name:           fuse
 Summary:        User space File System
-License:        GPL-2.0+ and LGPL-2.1+
+License:        GPL-2.0 and LGPL-2.1
 Group:          System/Libraries
 Version:        2.9.2
 Release:        0
