@@ -37,6 +37,7 @@
 #include <sys/uio.h>
 #include <sys/time.h>
 #include <sys/mman.h>
+#include <sys/file.h>
 
 #define FUSE_NODE_SLAB 1
 
@@ -1021,10 +1022,12 @@ static void queue_element_unlock(struct fuse *f, struct lock_queue_element *qe)
 	if (qe->first_locked) {
 		wnode = qe->wnode1 ? *qe->wnode1 : NULL;
 		unlock_path(f, qe->nodeid1, wnode, NULL);
+		qe->first_locked = false;
 	}
 	if (qe->second_locked) {
 		wnode = qe->wnode2 ? *qe->wnode2 : NULL;
 		unlock_path(f, qe->nodeid2, wnode, NULL);
+		qe->second_locked = false;
 	}
 }
 
@@ -2393,6 +2396,7 @@ static char *hidden_name(struct fuse *f, fuse_ino_t dir, const char *oldname,
 		if (res)
 			break;
 
+		memset(&buf, 0, sizeof(buf));
 		res = fuse_fs_getattr(f->fs, newpath, &buf);
 		if (res == -ENOENT)
 			break;
@@ -2766,6 +2770,7 @@ static void fuse_lib_setattr(fuse_req_t req, fuse_ino_t ino, struct stat *attr,
 	char *path;
 	int err;
 
+	memset(&buf, 0, sizeof(buf));
 	if (valid == FUSE_SET_ATTR_SIZE && fi != NULL &&
 	    f->fs->op.ftruncate && f->fs->op.fgetattr)
 		err = get_path_nullok(f, ino, &path);
@@ -3995,18 +4000,24 @@ static void fuse_lib_bmap(fuse_req_t req, fuse_ino_t ino, size_t blocksize,
 }
 
 static void fuse_lib_ioctl(fuse_req_t req, fuse_ino_t ino, int cmd, void *arg,
-			   struct fuse_file_info *fi, unsigned int flags,
+			   struct fuse_file_info *llfi, unsigned int flags,
 			   const void *in_buf, size_t in_bufsz,
 			   size_t out_bufsz)
 {
 	struct fuse *f = req_fuse_prepare(req);
 	struct fuse_intr_data d;
+	struct fuse_file_info fi;
 	char *path, *out_buf = NULL;
 	int err;
 
 	err = -EPERM;
 	if (flags & FUSE_IOCTL_UNRESTRICTED)
 		goto err;
+
+	if (flags & FUSE_IOCTL_DIR)
+		get_dirhandle(llfi, &fi);
+	else
+		fi = *llfi;
 
 	if (out_bufsz) {
 		err = -ENOMEM;
@@ -4025,7 +4036,7 @@ static void fuse_lib_ioctl(fuse_req_t req, fuse_ino_t ino, int cmd, void *arg,
 
 	fuse_prepare_interrupt(f, req, &d);
 
-	err = fuse_fs_ioctl(f->fs, path, cmd, arg, fi, flags,
+	err = fuse_fs_ioctl(f->fs, path, cmd, arg, &fi, flags,
 			    out_buf ?: (void *)in_buf);
 
 	fuse_finish_interrupt(f, req, &d);
@@ -4415,6 +4426,7 @@ static void fuse_lib_help(void)
 "    -o ac_attr_timeout=T   auto cache timeout for attributes (attr_timeout)\n"
 "    -o noforget            never forget cached inodes\n"
 "    -o remember=T          remember cached inodes for T seconds (0s)\n"
+"    -o nopath              don't supply path if not necessary\n"
 "    -o intr                allow requests to be interrupted\n"
 "    -o intr_signal=NUM     signal to send on interrupt (%i)\n"
 "    -o modules=M1[:M2...]  names of modules to push onto filesystem stack\n"
@@ -4695,6 +4707,10 @@ struct fuse *fuse_new_common(struct fuse_chan *ch, struct fuse_args *args,
 	if (root == NULL) {
 		fprintf(stderr, "fuse: memory allocation failed\n");
 		goto out_free_id_table;
+	}
+	if (lru_enabled(f)) {
+		struct node_lru *lnode = node_lru(root);
+		init_list_head(&lnode->lru);
 	}
 
 	strcpy(root->inline_name, "/");

@@ -1,10 +1,11 @@
-AC_INIT(fuse, 2.9.2)
+AC_INIT(fuse, 2.9.6)
+
 AC_PREREQ(2.59d)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES(yes)])
-AM_CONFIG_HEADER(include/config.h)
+AC_CONFIG_HEADERS(include/config.h)
 
 AC_PROG_LIBTOOL
 AC_PROG_CC
@@ -76,14 +77,17 @@ AC_SUBST(libfuse_libs)
 
 if test -z "$MOUNT_FUSE_PATH"; then
 	MOUNT_FUSE_PATH=/sbin
+	AC_MSG_NOTICE([MOUNT_FUSE_PATH env var not set, using default $MOUNT_FUSE_PATH])
 fi
 AC_SUBST(MOUNT_FUSE_PATH)
 if test -z "$UDEV_RULES_PATH"; then
 	UDEV_RULES_PATH=/etc/udev/rules.d
+	AC_MSG_NOTICE([UDEV_RULES_PATH env var not set, using default $UDEV_RULES_PATH])
 fi
 AC_SUBST(UDEV_RULES_PATH)
 if test -z "$INIT_D_PATH"; then
 	INIT_D_PATH=/etc/init.d
+	AC_MSG_NOTICE([INIT_D_PATH env var not set, using default $INIT_D_PATH])
 fi
 AC_SUBST(INIT_D_PATH)
 
@@ -102,8 +106,12 @@ if test "$arch" = linux -a "$cross_compiling" != "yes"; then
 		AC_MSG_RESULT([yes])
 	else
 		firstline=`umount --fake --no-canonicalize 2>&1 | head -1`
-		AC_MSG_RESULT([$firstline])
-		util_linux_ok=no
+		if test "$firstline" = 'umount: only root can use "--fake" option'; then
+			AC_MSG_RESULT([yes])
+		else
+			AC_MSG_RESULT([$firstline])
+			util_linux_ok=no
+		fi
 	fi
 fi
 

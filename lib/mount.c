@@ -278,7 +278,7 @@ static int receive_fd(int fd)
 	}
 
 	cmsg = CMSG_FIRSTHDR(&msg);
-	if (!cmsg->cmsg_type == SCM_RIGHTS) {
+	if (cmsg->cmsg_type != SCM_RIGHTS) {
 		fprintf(stderr, "got control message of unknown type %d\n",
 			cmsg->cmsg_type);
 		return -1;
@@ -300,14 +300,18 @@ void fuse_kern_unmount(const char *mountpoint, int fd)
 		pfd.fd = fd;
 		pfd.events = 0;
 		res = poll(&pfd, 1, 0);
+
+		/* Need to close file descriptor, otherwise synchronous umount
+		   would recurse into filesystem, and deadlock.
+
+		   Caller expects fuse_kern_unmount to close the fd, so close it
+		   anyway. */
+		close(fd);
+
 		/* If file poll returns POLLERR on the device file descriptor,
 		   then the filesystem is already unmounted */
 		if (res == 1 && (pfd.revents & POLLERR))
 			return;
-
-		/* Need to close file descriptor, otherwise synchronous umount
-		   would recurse into filesystem, and deadlock */
-		close(fd);
 	}
 
 	if (geteuid() == 0) {
@@ -463,7 +467,7 @@ static int fuse_mount_sys(const char *mnt, struct mount_opts *mo,
 		return -1;
 	}
 
-	snprintf(tmp, sizeof(tmp),  "fd=%i,rootmode=%o,user_id=%i,group_id=%i",
+	snprintf(tmp, sizeof(tmp),  "fd=%i,rootmode=%o,user_id=%u,group_id=%u",
 		 fd, stbuf.st_mode & S_IFMT, getuid(), getgid());
 
 	res = fuse_opt_add_opt(&mo->kernel_opts, tmp);
