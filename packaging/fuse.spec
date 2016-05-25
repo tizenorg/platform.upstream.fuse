@@ -2,7 +2,7 @@ Name:           fuse
 Summary:        User space File System
 License:        GPL-2.0 and LGPL-2.1
 Group:          System/Libraries
-Version:        2.9.2
+Version:        2.9.6
 Release:        0
 Source:         %{name}-%{version}.tar.gz
 Source2:        fuse.rpmlintrc
